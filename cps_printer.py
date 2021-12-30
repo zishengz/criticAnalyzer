@@ -2,7 +2,7 @@
 # --------------------------------------------------------
 # CP info extractor and printer for CP search stdout
 #   using critic2, periodic systems
-# 
+#
 # Copyright (C) 2021 Zisheng Zhang
 # Email: zisheng@chem.ucla.edu
 # --------------------------------------------------------
@@ -144,7 +144,7 @@ def get_cp_groups(out_raw, flag):
 
 def print_bcp_list(elem_list, ncp_index, bcp_index, bond_pair_index, groups, spcgrp, cptype, rho, grad, lap, bond_r1, bond_r2, angle_r1Br2):
     '''Print formated CP info'''
-    print(f'   B O N D       Rho     |Grad|      Lap      r1     r2    r1/r1  r1-B-r2')
+    print(f'Type  spg    B O N D        Rho     |Grad|      Lap      r1     r2    r1/r1  r1-B-r2')
     ncp_num = cptype.count('n')
     for b in range(len(bcp_index)):
         bp = bond_pair_index[b]
@@ -167,7 +167,7 @@ def print_bcp_list(elem_list, ncp_index, bcp_index, bond_pair_index, groups, spc
             if lap[mygroup] > 1000 or lap[mygroup] < -1000:
                 continue
             print(
-                f'{elem1:<5} - {elem2:<5}  {rho[mygroup]:.6f}  {grad[mygroup]:.4f}  {lap[mygroup]:10.6f}  {bond_r1[mygroup-ncp_num]:.3f}  {bond_r2[mygroup-ncp_num]:.3f}  {bond_r1[mygroup-ncp_num]/bond_r2[mygroup-ncp_num]:.3f}  {angle_r1Br2[mygroup-ncp_num]:.3f}')
+                f'{str(mygroup-ncp_num).center(4)}  {spcgrp[mygroup]}  {elem1:<5} - {elem2:<5}  {rho[mygroup]:.6f}  {grad[mygroup]:.4f}  {lap[mygroup]:10.6f}  {bond_r1[mygroup-ncp_num]:.3f}  {bond_r2[mygroup-ncp_num]:.3f}  {bond_r1[mygroup-ncp_num]/bond_r2[mygroup-ncp_num]:.3f}  {angle_r1Br2[mygroup-ncp_num]:.3f}')
 
 
 fname_inp = sys.argv[1]
@@ -182,7 +182,8 @@ flag_cp_list_unique, flag_bond_list_unique, flag_cp_groups, flag_cp_list_all, fl
     out_raw)
 spcgrp, cptype, rho, grad, lap = get_cp_list_unique(
     out_raw, flag_cp_list_unique)
-bond_r1, bond_r2, angle_r1Br2 = get_bond_list_unique(out_raw, flag_bond_list_unique)
+bond_r1, bond_r2, angle_r1Br2 = get_bond_list_unique(
+    out_raw, flag_bond_list_unique)
 
 groups = get_cp_groups(out_raw, flag_cp_groups)
 ncp, bcp = get_cp_list_all(out_raw, flag_cp_list_all)
